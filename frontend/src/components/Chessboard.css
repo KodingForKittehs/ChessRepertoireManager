@@ -2,9 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
 }
 
@@ -14,8 +13,8 @@
   grid-template-rows: repeat(8, 1fr);
   border: 3px solid #333;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  width: min(560px, 90vw);
-  height: min(560px, 90vw);
+  width: min(500px, 85vw);
+  height: min(500px, 85vw);
   max-width: 100%;
   aspect-ratio: 1 / 1;
 }
