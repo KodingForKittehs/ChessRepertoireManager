@@ -8,7 +8,6 @@ import {
   updateRepertoire,
   deleteRepertoire,
   exportState,
-  importState,
   type AppState,
   type Repertoire
 } from './appState'
