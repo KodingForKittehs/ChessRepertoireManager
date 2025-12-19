@@ -77,7 +77,7 @@ describe('Chessboard', () => {
     const buttons = container.querySelectorAll('.size-btn')
     fireEvent.click(buttons[1]) // reset button
     
-    expect(onBoardSizeChange).toHaveBeenCalledWith(560)
+    expect(onBoardSizeChange).toHaveBeenCalledWith(480)
   })
 
   it('respects minimum board size', () => {

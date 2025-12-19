@@ -24,7 +24,7 @@ describe('appState utility', () => {
       expect(state.version).toBe('1.0.0')
       expect(state.preferences.lightSquareColor).toBe('#f0d9b5')
       expect(state.preferences.darkSquareColor).toBe('#b58863')
-      expect(state.preferences.boardSize).toBe(560)
+      expect(state.preferences.boardSize).toBe(480)
       expect(state.repertoires).toEqual([])
     })
 
@@ -59,7 +59,7 @@ describe('appState utility', () => {
       const state = loadState()
       expect(state.preferences.lightSquareColor).toBe('#ffffff')
       expect(state.preferences.darkSquareColor).toBe('#b58863') // default
-      expect(state.preferences.boardSize).toBe(560) // default
+      expect(state.preferences.boardSize).toBe(480) // default
     })
 
     it('returns defaults on invalid JSON', () => {

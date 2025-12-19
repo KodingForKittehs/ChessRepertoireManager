@@ -43,7 +43,7 @@ describe('AppStateContext', () => {
     
     expect(screen.getByTestId('light-color')).toHaveTextContent('#f0d9b5')
     expect(screen.getByTestId('dark-color')).toHaveTextContent('#b58863')
-    expect(screen.getByTestId('board-size')).toHaveTextContent('560')
+    expect(screen.getByTestId('board-size')).toHaveTextContent('480')
     expect(screen.getByTestId('version')).toHaveTextContent('1.0.0')
   })
 

@@ -26,7 +26,7 @@ const Chessboard: React.FC<ChessboardProps> = ({
   };
 
   const handleReset = () => {
-    onBoardSizeChange?.(560);
+    onBoardSizeChange?.(480);
   };
 
   return (

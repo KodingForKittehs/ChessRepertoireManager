@@ -28,7 +28,7 @@ const DEFAULT_STATE: AppState = {
   preferences: {
     lightSquareColor: '#f0d9b5',
     darkSquareColor: '#b58863',
-    boardSize: 560
+    boardSize: 480
   },
   repertoires: [],
   lastModified: new Date().toISOString()

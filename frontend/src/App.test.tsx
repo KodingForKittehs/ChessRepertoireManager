@@ -26,6 +26,11 @@ describe('App', () => {
     expect(container.querySelector('.chessboard-container')).toBeInTheDocument()
   })
 
+  it('renders MoveExplorer component', () => {
+    renderWithProvider(<App />)
+    expect(screen.getByText('Move Explorer')).toBeInTheDocument()
+  })
+
   it('calls handleNewGame when New Game button is clicked', () => {
     consoleLogSpy.mockClear()
     renderWithProvider(<App />)

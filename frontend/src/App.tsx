@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Chessboard from './components/Chessboard'
 import Menu from './components/Menu'
+import MoveExplorer from './components/MoveExplorer'
 import SettingsModal from './components/SettingsModal'
 import { useAppState } from './contexts/AppStateContext'
 import './App.css'
@@ -53,12 +54,15 @@ function App() {
           onRedo={handleRedo}
           onSettings={handleSettings}
         />
-        <Chessboard 
-          lightSquareColor={state.preferences.lightSquareColor}
-          darkSquareColor={state.preferences.darkSquareColor}
-          boardSize={state.preferences.boardSize}
-          onBoardSizeChange={updateBoardSize}
-        />
+        <div className="main-content">
+          <Chessboard 
+            lightSquareColor={state.preferences.lightSquareColor}
+            darkSquareColor={state.preferences.darkSquareColor}
+            boardSize={state.preferences.boardSize}
+            onBoardSizeChange={updateBoardSize}
+          />
+          <MoveExplorer />
+        </div>
         <SettingsModal
           isOpen={isSettingsOpen}
           onClose={handleCloseSettings}
