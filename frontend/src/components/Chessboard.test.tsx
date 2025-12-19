@@ -41,62 +41,9 @@ describe('Chessboard', () => {
     expect(wrapper).toBeInTheDocument()
   })
 
-  it('renders resize controls', () => {
+  it('renders resize handle', () => {
     const { container } = render(<Chessboard />)
-    const controls = container.querySelector('.chessboard-controls')
-    expect(controls).toBeInTheDocument()
-    
-    const buttons = container.querySelectorAll('.size-btn')
-    expect(buttons).toHaveLength(3) // decrease, reset, increase
-  })
-
-  it('calls onBoardSizeChange when increase button clicked', () => {
-    const onBoardSizeChange = vi.fn()
-    const { container } = render(<Chessboard boardSize={560} onBoardSizeChange={onBoardSizeChange} />)
-    
-    const buttons = container.querySelectorAll('.size-btn')
-    fireEvent.click(buttons[2]) // increase button
-    
-    expect(onBoardSizeChange).toHaveBeenCalledWith(600)
-  })
-
-  it('calls onBoardSizeChange when decrease button clicked', () => {
-    const onBoardSizeChange = vi.fn()
-    const { container } = render(<Chessboard boardSize={560} onBoardSizeChange={onBoardSizeChange} />)
-    
-    const buttons = container.querySelectorAll('.size-btn')
-    fireEvent.click(buttons[0]) // decrease button
-    
-    expect(onBoardSizeChange).toHaveBeenCalledWith(520)
-  })
-
-  it('calls onBoardSizeChange when reset button clicked', () => {
-    const onBoardSizeChange = vi.fn()
-    const { container } = render(<Chessboard boardSize={720} onBoardSizeChange={onBoardSizeChange} />)
-    
-    const buttons = container.querySelectorAll('.size-btn')
-    fireEvent.click(buttons[1]) // reset button
-    
-    expect(onBoardSizeChange).toHaveBeenCalledWith(480)
-  })
-
-  it('respects minimum board size', () => {
-    const onBoardSizeChange = vi.fn()
-    const { container } = render(<Chessboard boardSize={320} onBoardSizeChange={onBoardSizeChange} />)
-    
-    const buttons = container.querySelectorAll('.size-btn')
-    fireEvent.click(buttons[0]) // decrease button
-    
-    expect(onBoardSizeChange).toHaveBeenCalledWith(320) // should not go below 320
-  })
-
-  it('respects maximum board size', () => {
-    const onBoardSizeChange = vi.fn()
-    const { container } = render(<Chessboard boardSize={800} onBoardSizeChange={onBoardSizeChange} />)
-    
-    const buttons = container.querySelectorAll('.size-btn')
-    fireEvent.click(buttons[2]) // increase button
-    
-    expect(onBoardSizeChange).toHaveBeenCalledWith(800) // should not go above 800
+    const resizeHandle = container.querySelector('.resize-handle')
+    expect(resizeHandle).toBeInTheDocument()
   })
 })

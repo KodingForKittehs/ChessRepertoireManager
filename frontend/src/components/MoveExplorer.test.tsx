@@ -19,4 +19,10 @@ describe('MoveExplorer', () => {
     expect(container.querySelector('.move-explorer-header')).toBeInTheDocument()
     expect(container.querySelector('.move-explorer-content')).toBeInTheDocument()
   })
+
+  it('renders resize handle', () => {
+    const { container } = render(<MoveExplorer />)
+    const resizeHandle = container.querySelector('.resize-handle')
+    expect(resizeHandle).toBeInTheDocument()
+  })
 })

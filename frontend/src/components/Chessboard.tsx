@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Chessboard as ReactChessboard } from 'react-chessboard';
 import './Chessboard.css';
 
@@ -15,37 +15,58 @@ const Chessboard: React.FC<ChessboardProps> = ({
   boardSize = 560,
   onBoardSizeChange
 }) => {
-  const handleIncrease = () => {
-    const newSize = Math.min(boardSize + 40, 800);
-    onBoardSizeChange?.(newSize);
-  };
+  const isDraggingRef = useRef(false);
+  const startPosRef = useRef({ x: 0, y: 0, size: 0 });
 
-  const handleDecrease = () => {
-    const newSize = Math.max(boardSize - 40, 320);
-    onBoardSizeChange?.(newSize);
-  };
+  const handleResizeStart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    isDraggingRef.current = true;
+    startPosRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      size: boardSize
+    };
 
-  const handleReset = () => {
-    onBoardSizeChange?.(480);
+    const handleMove = (e: MouseEvent) => {
+      if (!isDraggingRef.current) return;
+
+      const deltaX = e.clientX - startPosRef.current.x;
+      const deltaY = e.clientY - startPosRef.current.y;
+      const delta = Math.max(deltaX, deltaY);
+      const newSize = Math.max(320, Math.min(800, startPosRef.current.size + delta));
+      
+      onBoardSizeChange?.(newSize);
+    };
+
+    const handleEnd = () => {
+      isDraggingRef.current = false;
+      document.removeEventListener('mousemove', handleMove);
+      document.removeEventListener('mouseup', handleEnd);
+    };
+
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('mouseup', handleEnd);
   };
 
   return (
     <div className="chessboard-container">
-      <div className="chessboard-controls">
-        <button onClick={handleDecrease} className="size-btn" title="Decrease size">−</button>
-        <button onClick={handleReset} className="size-btn" title="Reset size">⟲</button>
-        <button onClick={handleIncrease} className="size-btn" title="Increase size">+</button>
+      <div className="resizable-wrapper">
+        <ReactChessboard 
+          options={{
+            boardStyle: { 
+              width: `${boardSize}px`,
+              height: `${boardSize}px`
+            },
+            darkSquareStyle: { backgroundColor: darkSquareColor },
+            lightSquareStyle: { backgroundColor: lightSquareColor }
+          }}
+        />
+        <div 
+          className="resize-handle"
+          onMouseDown={handleResizeStart}
+          title="Drag to resize"
+        />
       </div>
-      <ReactChessboard 
-        options={{
-          boardStyle: { 
-            width: `${boardSize}px`,
-            height: `${boardSize}px`
-          },
-          darkSquareStyle: { backgroundColor: darkSquareColor },
-          lightSquareStyle: { backgroundColor: lightSquareColor }
-        }}
-      />
     </div>
   );
 };
