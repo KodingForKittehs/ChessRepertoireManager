@@ -7,7 +7,7 @@ import './App.css'
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-  const { state } = useAppState()
+  const { state, updateBoardSize } = useAppState()
 
   const handleNewGame = () => {
     console.log('New Game clicked')
@@ -56,6 +56,8 @@ function App() {
         <Chessboard 
           lightSquareColor={state.preferences.lightSquareColor}
           darkSquareColor={state.preferences.darkSquareColor}
+          boardSize={state.preferences.boardSize}
+          onBoardSizeChange={updateBoardSize}
         />
         <SettingsModal
           isOpen={isSettingsOpen}

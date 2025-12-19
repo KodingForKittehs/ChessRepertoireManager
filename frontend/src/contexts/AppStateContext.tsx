@@ -7,6 +7,7 @@ interface AppStateContextType {
   state: AppState
   updateLightSquareColor: (color: string) => void
   updateDarkSquareColor: (color: string) => void
+  updateBoardSize: (size: number) => void
   exportAppState: () => void
   importAppState: () => Promise<void>
   resetAppState: () => void
@@ -42,6 +43,16 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }))
   }
 
+  const updateBoardSize = (size: number) => {
+    setState(prev => ({
+      ...prev,
+      preferences: {
+        ...prev.preferences,
+        boardSize: size
+      }
+    }))
+  }
+
   const exportAppState = () => {
     exportState()
   }
@@ -62,6 +73,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         state,
         updateLightSquareColor,
         updateDarkSquareColor,
+        updateBoardSize,
         exportAppState,
         importAppState,
         resetAppState

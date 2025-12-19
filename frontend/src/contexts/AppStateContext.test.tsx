@@ -9,6 +9,7 @@ function TestComponent() {
     state, 
     updateLightSquareColor, 
     updateDarkSquareColor,
+    updateBoardSize,
     resetAppState 
   } = useAppState()
 
@@ -16,12 +17,16 @@ function TestComponent() {
     <div>
       <div data-testid="light-color">{state.preferences.lightSquareColor}</div>
       <div data-testid="dark-color">{state.preferences.darkSquareColor}</div>
+      <div data-testid="board-size">{state.preferences.boardSize}</div>
       <div data-testid="version">{state.version}</div>
       <button onClick={() => updateLightSquareColor('#ffffff')}>
         Change Light
       </button>
       <button onClick={() => updateDarkSquareColor('#000000')}>
         Change Dark
+      </button>
+      <button onClick={() => updateBoardSize(640)}>
+        Change Size
       </button>
       <button onClick={resetAppState}>Reset</button>
     </div>
@@ -38,6 +43,7 @@ describe('AppStateContext', () => {
     
     expect(screen.getByTestId('light-color')).toHaveTextContent('#f0d9b5')
     expect(screen.getByTestId('dark-color')).toHaveTextContent('#b58863')
+    expect(screen.getByTestId('board-size')).toHaveTextContent('560')
     expect(screen.getByTestId('version')).toHaveTextContent('1.0.0')
   })
 
@@ -100,7 +106,8 @@ describe('AppStateContext', () => {
       version: '1.0.0',
       preferences: {
         lightSquareColor: '#aabbcc',
-        darkSquareColor: '#ddeeff'
+        darkSquareColor: '#ddeeff',
+        boardSize: 480
       },
       repertoires: [],
       lastModified: new Date().toISOString()
@@ -111,5 +118,16 @@ describe('AppStateContext', () => {
     
     expect(screen.getByTestId('light-color')).toHaveTextContent('#aabbcc')
     expect(screen.getByTestId('dark-color')).toHaveTextContent('#ddeeff')
+    expect(screen.getByTestId('board-size')).toHaveTextContent('480')
+  })
+
+  it('updates board size', async () => {
+    renderWithProvider(<TestComponent />)
+    
+    fireEvent.click(screen.getByText('Change Size'))
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('board-size')).toHaveTextContent('640')
+    })
   })
 })

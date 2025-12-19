@@ -6,6 +6,7 @@
 export interface BoardPreferences {
   lightSquareColor: string
   darkSquareColor: string
+  boardSize: number
 }
 
 export interface Repertoire {
@@ -26,7 +27,8 @@ const DEFAULT_STATE: AppState = {
   version: '1.0.0',
   preferences: {
     lightSquareColor: '#f0d9b5',
-    darkSquareColor: '#b58863'
+    darkSquareColor: '#b58863',
+    boardSize: 560
   },
   repertoires: [],
   lastModified: new Date().toISOString()

@@ -24,6 +24,7 @@ describe('appState utility', () => {
       expect(state.version).toBe('1.0.0')
       expect(state.preferences.lightSquareColor).toBe('#f0d9b5')
       expect(state.preferences.darkSquareColor).toBe('#b58863')
+      expect(state.preferences.boardSize).toBe(560)
       expect(state.repertoires).toEqual([])
     })
 
@@ -32,7 +33,8 @@ describe('appState utility', () => {
         version: '1.0.0',
         preferences: {
           lightSquareColor: '#123456',
-          darkSquareColor: '#abcdef'
+          darkSquareColor: '#abcdef',
+          boardSize: 640
         },
         repertoires: [],
         lastModified: new Date().toISOString()
@@ -42,6 +44,7 @@ describe('appState utility', () => {
       const state = loadState()
       expect(state.preferences.lightSquareColor).toBe('#123456')
       expect(state.preferences.darkSquareColor).toBe('#abcdef')
+      expect(state.preferences.boardSize).toBe(640)
     })
 
     it('merges with defaults when loading partial state', () => {
@@ -56,6 +59,7 @@ describe('appState utility', () => {
       const state = loadState()
       expect(state.preferences.lightSquareColor).toBe('#ffffff')
       expect(state.preferences.darkSquareColor).toBe('#b58863') // default
+      expect(state.preferences.boardSize).toBe(560) // default
     })
 
     it('returns defaults on invalid JSON', () => {
@@ -72,7 +76,8 @@ describe('appState utility', () => {
         version: '1.0.0',
         preferences: {
           lightSquareColor: '#ffffff',
-          darkSquareColor: '#000000'
+          darkSquareColor: '#000000',
+          boardSize: 720
         },
         repertoires: [],
         lastModified: new Date().toISOString()
