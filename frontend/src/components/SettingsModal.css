@@ -35,18 +35,18 @@
 }
 
 .settings-modal::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
 }
 
 .settings-modal::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 /* For Firefox */
 .settings-modal {
   scrollbar-width: thin;
-  scrollbar-color: #667eea #f1f1f1;
+  scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
 }
 
 @keyframes slideIn {
@@ -209,7 +209,7 @@
 }
 
 .color-input-wrapper input[type="color"]:hover {
-  border-color: #667eea;
+  opacity: 0.8;
 }
 
 .color-value {
