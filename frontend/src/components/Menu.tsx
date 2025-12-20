@@ -29,21 +29,8 @@ function Menu({ onSettings, onRepertoires, onSelectRepertoire }: MenuProps) {
       }}
     >
       <div className="menu-section">
-        {selectedRepertoire && (
-          <div 
-            className="active-repertoire-display"
-            style={{
-              backgroundColor: currentTheme.accent,
-              color: '#ffffff'
-            }}
-          >
-            <div className="active-repertoire-name">{selectedRepertoire.name}</div>
-            <div className="active-repertoire-mode">{getModeLabel()}</div>
-          </div>
-        )}
-        
         <button 
-          className="menu-button" 
+          className="menu-button active-repertoire-button" 
           onClick={onSelectRepertoire}
           style={{
             backgroundColor: currentTheme.accent,
@@ -51,7 +38,14 @@ function Menu({ onSettings, onRepertoires, onSelectRepertoire }: MenuProps) {
             color: '#ffffff'
           }}
         >
-          {selectedRepertoire ? 'Switch Repertoire' : 'Select Repertoire'}
+          {selectedRepertoire ? (
+            <>
+              <span className="active-repertoire-name">{selectedRepertoire.name}</span>
+              <span className="active-repertoire-mode">{getModeLabel()}</span>
+            </>
+          ) : (
+            'Select Repertoire'
+          )}
         </button>
         
         <button 

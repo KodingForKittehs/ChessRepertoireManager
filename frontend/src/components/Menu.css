@@ -34,18 +34,10 @@
   padding-left: 0;
 }
 
-.active-repertoire-display {
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
+.active-repertoire-button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-  height: 100%;
 }
 
 .active-repertoire-name {
