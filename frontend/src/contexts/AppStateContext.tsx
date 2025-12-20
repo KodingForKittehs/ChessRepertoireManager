@@ -10,7 +10,8 @@ import {
   getCurrentTheme, 
   THEMES,
   createEmptyRepertoire,
-  selectRepertoire 
+  selectRepertoire,
+  updateSwapBoardExplorer as persistUpdateSwap
 } from '../utils/appState'
 
 interface AppStateContextType {
@@ -20,6 +21,7 @@ interface AppStateContextType {
   updateDarkSquareColor: (color: string) => void
   updateBoardSize: (size: number) => void
   updateTheme: (themeName: string) => void
+  updateSwapBoardExplorer: (swap: boolean) => void
   updateMoveExplorerDimensions: (width: number, height: number) => void
   addRepertoire: (name: string, perspective: 'white' | 'black') => void
   updateRepertoire: (id: string, updates: Partial<Omit<Repertoire, 'id'>>) => void
@@ -82,6 +84,18 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       preferences: {
         ...prev.preferences,
         theme: themeName
+      }
+    }))
+  }
+
+  const updateSwapBoardExplorer = (swap: boolean) => {
+    // Persist via helper so localStorage is kept in sync
+    persistUpdateSwap(swap)
+    setState(prev => ({
+      ...prev,
+      preferences: {
+        ...prev.preferences,
+        swapBoardExplorer: swap
       }
     }))
   }
@@ -168,6 +182,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         updateDarkSquareColor,
         updateBoardSize,
         updateTheme,
+        updateSwapBoardExplorer,
         updateMoveExplorerDimensions,
         addRepertoire,
         updateRepertoire,

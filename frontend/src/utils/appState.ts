@@ -19,6 +19,7 @@ export interface BoardPreferences {
   theme: string // theme name
   moveExplorerWidth: number
   moveExplorerHeight: number
+  swapBoardExplorer?: boolean
 }
 
 export type Perspective = 'white' | 'black'
@@ -117,6 +118,8 @@ export const DEFAULT_STATE: AppState = {
     theme: 'calico',
     moveExplorerWidth: 320,
     moveExplorerHeight: 400
+    ,
+    swapBoardExplorer: false
   },
   repertoires: [],
   selectedRepertoireId: null,
@@ -221,6 +224,13 @@ export function updateTheme(themeName: string): void {
     return
   }
   updatePreferences({ theme: themeName })
+}
+
+/**
+ * Update swapBoardExplorer preference
+ */
+export function updateSwapBoardExplorer(swap: boolean): void {
+  updatePreferences({ swapBoardExplorer: swap })
 }
 
 /**

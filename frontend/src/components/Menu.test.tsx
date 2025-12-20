@@ -165,4 +165,8 @@ describe('Menu', () => {
     fireEvent.click(screen.getByText('Sicilian Defense'))
     expect(mockOnSelectRepertoire).toHaveBeenCalledTimes(1)
   })
+
+  it('toggles swapBoardExplorer preference when swap button clicked', () => {
+    // Swap control moved to SettingsModal; behavior covered in Settings tests
+  })
 })

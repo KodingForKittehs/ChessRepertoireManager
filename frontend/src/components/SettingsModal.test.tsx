@@ -221,4 +221,25 @@ describe('SettingsModal', () => {
       expect(darkTheme.classList.contains('active')).toBe(true)
     })
   })
+
+  it('toggles swapBoardExplorer preference via checkbox', () => {
+    const { container } = renderWithProvider(
+      <SettingsModal isOpen={true} onClose={mockOnClose} />
+    )
+
+    const leftRadio = container.querySelector('input[name="boardPosition"][value="left"]') as HTMLInputElement
+    const rightRadio = container.querySelector('input[name="boardPosition"][value="right"]') as HTMLInputElement
+    expect(leftRadio).toBeInTheDocument()
+    expect(rightRadio).toBeInTheDocument()
+
+    // Default should be left (swap false)
+    expect(leftRadio.checked).toBe(true)
+    expect(rightRadio.checked).toBe(false)
+
+    // Select right (board on right)
+    fireEvent.click(rightRadio)
+
+    const saved = JSON.parse(localStorage.getItem('calicoChessState')!)
+    expect(saved.preferences.swapBoardExplorer).toBe(true)
+  })
 })

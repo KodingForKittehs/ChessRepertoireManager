@@ -14,7 +14,7 @@ function SettingsModal({
 }: SettingsModalProps) {
   if (!isOpen) return null
 
-  const { state, currentTheme, updateLightSquareColor, updateDarkSquareColor, updateTheme, exportAppState, importAppState, resetAppState } = useAppState()
+  const { state, currentTheme, updateLightSquareColor, updateDarkSquareColor, updateTheme, exportAppState, importAppState, resetAppState, updateSwapBoardExplorer } = useAppState()
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null)
 
   const presetThemes = [
@@ -190,6 +190,33 @@ function SettingsModal({
 
           <div className="state-management-section">
             <h3>State Management</h3>
+            <div className="swap-section">
+              <h4>Board / Explorer Layout</h4>
+              <p className="swap-help">Choose whether the chessboard appears on the left or the right of the Move Explorer.</p>
+              <div className="swap-options">
+                <label className="swap-option">
+                  <input
+                    type="radio"
+                    name="boardPosition"
+                    value="left"
+                    checked={!state.preferences.swapBoardExplorer}
+                    onChange={() => updateSwapBoardExplorer(false)}
+                  />
+                  <span>Board on left</span>
+                </label>
+
+                <label className="swap-option">
+                  <input
+                    type="radio"
+                    name="boardPosition"
+                    value="right"
+                    checked={!!state.preferences.swapBoardExplorer}
+                    onChange={() => updateSwapBoardExplorer(true)}
+                  />
+                  <span>Board on right</span>
+                </label>
+              </div>
+            </div>
             <div className="state-buttons">
               <button 
                 className="state-button export" 

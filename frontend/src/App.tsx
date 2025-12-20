@@ -53,13 +53,27 @@ function App() {
           onSelectRepertoire={handleSelectRepertoire}
         />
         <div className="main-content">
-          <Chessboard 
-            lightSquareColor={state.preferences.lightSquareColor}
-            darkSquareColor={state.preferences.darkSquareColor}
-            boardSize={state.preferences.boardSize}
-            onBoardSizeChange={updateBoardSize}
-          />
-          <MoveExplorer />
+          {state.preferences.swapBoardExplorer ? (
+            <>
+              <MoveExplorer />
+              <Chessboard 
+                lightSquareColor={state.preferences.lightSquareColor}
+                darkSquareColor={state.preferences.darkSquareColor}
+                boardSize={state.preferences.boardSize}
+                onBoardSizeChange={updateBoardSize}
+              />
+            </>
+          ) : (
+            <>
+              <Chessboard 
+                lightSquareColor={state.preferences.lightSquareColor}
+                darkSquareColor={state.preferences.darkSquareColor}
+                boardSize={state.preferences.boardSize}
+                onBoardSizeChange={updateBoardSize}
+              />
+              <MoveExplorer />
+            </>
+          )}
         </div>
         <SettingsModal
           isOpen={isSettingsOpen}

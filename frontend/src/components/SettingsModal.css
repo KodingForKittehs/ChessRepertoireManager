@@ -369,6 +369,30 @@
   border: 1px solid #f5c6cb;
 }
 
+/* Swap layout controls */
+.swap-section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.swap-help {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin: 0 0 0.5rem 0;
+}
+.swap-options {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.swap-option {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+
+
 @media (max-width: 768px) {
   .state-buttons {
     gap: 0.5rem;

@@ -70,6 +70,7 @@ function Menu({ onSettings, onRepertoires, onSelectRepertoire }: MenuProps) {
         >
           Settings
         </button>
+        {/* Swap control moved to Settings modal */}
       </div>
     </div>
   )
