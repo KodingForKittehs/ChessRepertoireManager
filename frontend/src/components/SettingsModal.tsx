@@ -14,7 +14,7 @@ function SettingsModal({
 }: SettingsModalProps) {
   if (!isOpen) return null
 
-  const { state, currentTheme, updateLightSquareColor, updateDarkSquareColor, updateTheme, exportAppState, importAppState, resetAppState, updateSwapBoardExplorer } = useAppState()
+  const { state, currentTheme, updateLightSquareColor, updateDarkSquareColor, updateTheme, exportAppState, importAppState, resetAppState, updateSwapBoardExplorer, updateLockWindowResizing } = useAppState()
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null)
 
   const presetThemes = [
@@ -216,6 +216,21 @@ function SettingsModal({
                   <span>Board on right</span>
                 </label>
               </div>
+            </div>
+          </div>
+
+          <div className="resize-lock-section">
+            <h3>Window Resizing</h3>
+            <div className="lock-option">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={!!state.preferences.lockWindowResizing}
+                  onChange={(e) => updateLockWindowResizing(e.target.checked)}
+                />
+                <span>Lock window resizing (hide drag handles)</span>
+              </label>
+              <p className="lock-help">Prevents unintentional resizing and makes selecting pieces easier.</p>
             </div>
           </div>
 

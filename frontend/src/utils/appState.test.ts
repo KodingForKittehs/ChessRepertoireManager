@@ -4,6 +4,7 @@ import {
   saveState,
   updatePreferences,
   updateTheme,
+    updateLockWindowResizing,
   getCurrentTheme,
   resetState,
   addRepertoire,
@@ -307,6 +308,20 @@ describe('appState utility', () => {
       expect(state.preferences.theme).toBe('calico')
       
       consoleErrorSpy.mockRestore()
+    })
+  })
+
+  describe('lock window resizing preference', () => {
+    it('defaults to unlocked', () => {
+      const state = loadState()
+      expect(state.preferences.lockWindowResizing).toBe(false)
+    })
+
+    it('can be updated and persisted', () => {
+      updateLockWindowResizing(true)
+
+      const state = loadState()
+      expect(state.preferences.lockWindowResizing).toBe(true)
     })
   })
 

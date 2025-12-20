@@ -12,6 +12,8 @@ import {
   createEmptyRepertoire,
   selectRepertoire,
   updateSwapBoardExplorer as persistUpdateSwap
+  ,
+  updateLockWindowResizing as persistUpdateLock
 } from '../utils/appState'
 
 interface AppStateContextType {
@@ -24,6 +26,7 @@ interface AppStateContextType {
   updateSwapBoardExplorer: (swap: boolean) => void
   updateBoardOrientation: (orientation: 'white' | 'black') => void
   updateMoveExplorerDimensions: (width: number, height: number) => void
+  updateLockWindowResizing: (locked: boolean) => void
   addRepertoire: (name: string, perspective: 'white' | 'black') => void
   updateRepertoire: (id: string, updates: Partial<Omit<Repertoire, 'id'>>) => void
   deleteRepertoire: (id: string) => void
@@ -107,6 +110,18 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       preferences: {
         ...prev.preferences,
         swapBoardExplorer: swap
+      }
+    }))
+  }
+
+  const updateLockWindowResizing = (locked: boolean) => {
+    // Persist via helper so localStorage is kept in sync
+    persistUpdateLock(locked)
+    setState(prev => ({
+      ...prev,
+      preferences: {
+        ...prev.preferences,
+        lockWindowResizing: locked
       }
     }))
   }
@@ -202,6 +217,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         updateSwapBoardExplorer,
         updateBoardOrientation,
         updateMoveExplorerDimensions,
+        updateLockWindowResizing,
         addRepertoire,
         updateRepertoire,
         deleteRepertoire,

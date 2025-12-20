@@ -21,6 +21,7 @@ export interface BoardPreferences {
   moveExplorerWidth: number
   moveExplorerHeight: number
   swapBoardExplorer?: boolean
+  lockWindowResizing?: boolean
 }
 
 export type Perspective = 'white' | 'black'
@@ -122,6 +123,8 @@ export const DEFAULT_STATE: AppState = {
     moveExplorerHeight: 400
     ,
     swapBoardExplorer: false
+    ,
+    lockWindowResizing: false
   },
   repertoires: [],
   selectedRepertoireId: null,
@@ -233,6 +236,13 @@ export function updateTheme(themeName: string): void {
  */
 export function updateSwapBoardExplorer(swap: boolean): void {
   updatePreferences({ swapBoardExplorer: swap })
+}
+
+/**
+ * Update lockWindowResizing preference
+ */
+export function updateLockWindowResizing(locked: boolean): void {
+  updatePreferences({ lockWindowResizing: locked })
 }
 
 /**

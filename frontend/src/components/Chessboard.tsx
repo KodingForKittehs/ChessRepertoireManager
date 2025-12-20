@@ -267,11 +267,13 @@ const Chessboard: React.FC<ChessboardProps> = ({
             lightSquareStyle: { backgroundColor: lightSquareColor }
           }}
         />
-        <div 
-          className="resize-handle"
-          onMouseDown={handleResizeStart}
-          title="Drag to resize"
-        />
+        {!state.preferences.lockWindowResizing && (
+          <div 
+            className="resize-handle"
+            onMouseDown={handleResizeStart}
+            title="Drag to resize"
+          />
+        )}
       </div>
     </div>
   );
