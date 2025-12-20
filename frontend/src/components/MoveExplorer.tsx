@@ -1,10 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useAppState } from '../contexts/AppStateContext';
 import './MoveExplorer.css';
 
 const MoveExplorer: React.FC = () => {
-  const { currentTheme } = useAppState();
-  const [dimensions, setDimensions] = useState({ width: 320, height: 400 });
+  const { currentTheme, state, updateMoveExplorerDimensions } = useAppState();
+  const dimensions = {
+    width: state.preferences.moveExplorerWidth,
+    height: state.preferences.moveExplorerHeight
+  };
   const isDraggingRef = useRef(false);
   const startPosRef = useRef({ x: 0, y: 0, width: 0, height: 0 });
 
@@ -26,7 +29,7 @@ const MoveExplorer: React.FC = () => {
       const newWidth = Math.max(280, Math.min(600, startPosRef.current.width + deltaX));
       const newHeight = Math.max(300, Math.min(800, startPosRef.current.height + deltaY));
       
-      setDimensions({ width: newWidth, height: newHeight });
+      updateMoveExplorerDimensions(newWidth, newHeight);
     };
 
     const handleEnd = () => {

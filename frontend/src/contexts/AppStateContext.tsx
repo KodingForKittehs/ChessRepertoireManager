@@ -20,6 +20,7 @@ interface AppStateContextType {
   updateDarkSquareColor: (color: string) => void
   updateBoardSize: (size: number) => void
   updateTheme: (themeName: string) => void
+  updateMoveExplorerDimensions: (width: number, height: number) => void
   addRepertoire: (name: string, perspective: 'white' | 'black') => void
   updateRepertoire: (id: string, updates: Partial<Omit<Repertoire, 'id'>>) => void
   deleteRepertoire: (id: string) => void
@@ -84,6 +85,17 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }))
   }
 
+  const updateMoveExplorerDimensions = (width: number, height: number) => {
+    setState(prev => ({
+      ...prev,
+      preferences: {
+        ...prev.preferences,
+        moveExplorerWidth: width,
+        moveExplorerHeight: height
+      }
+    }))
+  }
+
   const exportAppState = () => {
     exportState()
   }
@@ -143,6 +155,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         updateDarkSquareColor,
         updateBoardSize,
         updateTheme,
+        updateMoveExplorerDimensions,
         addRepertoire,
         updateRepertoire,
         deleteRepertoire,
