@@ -76,7 +76,7 @@ describe('Menu', () => {
     
     expect(screen.getByText('Sicilian Defense')).toBeInTheDocument()
     expect(screen.getByText('🎯 Training')).toBeInTheDocument()
-    expect(screen.getByText('Switch Repertoire')).toBeInTheDocument()
+    // The repertoire name is now the button itself, not a separate "Switch Repertoire" button
   })
 
   it('shows editing mode when repertoire is in editing mode', () => {
@@ -124,5 +124,45 @@ describe('Menu', () => {
     fireEvent.click(screen.getByText('Manage Repertoires'))
     fireEvent.click(screen.getByText('Settings'))
     // Should not throw any errors
+  })
+
+  it('calls onSelectRepertoire when clicking repertoire button with active repertoire', () => {
+    const mockOnSelectRepertoire = vi.fn()
+    const initialState = {
+      version: '1.0.0',
+      preferences: {
+        lightSquareColor: '#f0d9b5',
+        darkSquareColor: '#b58863',
+        boardSize: 480,
+        theme: 'calico'
+      },
+      repertoires: [{
+        id: 'rep1',
+        name: 'Sicilian Defense',
+        perspective: 'black' as const,
+        rootNodeId: 'initial',
+        nodes: {
+          initial: {
+            id: 'initial',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+            moves: [],
+            parentMoves: []
+          }
+        },
+        createdAt: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z'
+      }],
+      selectedRepertoireId: 'rep1',
+      repertoireMode: 'training' as const,
+      lastModified: '2023-01-01T00:00:00.000Z'
+    }
+
+    localStorage.setItem('calicoChessState', JSON.stringify(initialState))
+
+    renderWithProvider(<Menu onSelectRepertoire={mockOnSelectRepertoire} />)
+    
+    // Click on the repertoire name button to switch
+    fireEvent.click(screen.getByText('Sicilian Defense'))
+    expect(mockOnSelectRepertoire).toHaveBeenCalledTimes(1)
   })
 })
