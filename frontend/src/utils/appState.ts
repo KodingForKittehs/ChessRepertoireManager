@@ -166,7 +166,8 @@ export function exportState(): void {
     const url = URL.createObjectURL(dataBlob)
     const link = document.createElement('a')
     link.href = url
-    link.download = `calico-chess-state-${new Date().toISOString().split('T')[0]}.json`
+    const timestamp = new Date().toISOString().replace(/:/g, '-').split('.')[0] // YYYY-MM-DDTHH-MM-SS
+    link.download = `calico-chess-state-${timestamp}.json`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
