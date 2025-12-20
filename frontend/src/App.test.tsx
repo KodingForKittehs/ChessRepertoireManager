@@ -6,12 +6,12 @@ import App from './App'
 describe('App', () => {
   it('renders without crashing', () => {
     renderWithProvider(<App />)
-    expect(screen.getByText('Repertoires')).toBeInTheDocument()
+    expect(screen.getByText('Select Repertoire')).toBeInTheDocument()
   })
 
   it('renders Menu component', () => {
     renderWithProvider(<App />)
-    expect(screen.getByText('Repertoires')).toBeInTheDocument()
+    expect(screen.getByText('Manage Repertoires')).toBeInTheDocument()
     expect(screen.getByText('Settings')).toBeInTheDocument()
   })
 
@@ -39,14 +39,14 @@ describe('App', () => {
     expect(container.querySelector('.settings-header')).toBeInTheDocument()
   })
 
-  it('opens repertoire manager when Repertoires button is clicked', () => {
+  it('opens repertoire manager when Manage Repertoires button is clicked', () => {
     const { container } = renderWithProvider(<App />)
     
     // Modal should not be visible initially
     expect(container.querySelector('.repertoire-manager')).not.toBeInTheDocument()
     
-    // Click Repertoires button
-    fireEvent.click(screen.getByText('Repertoires'))
+    // Click Manage Repertoires button
+    fireEvent.click(screen.getByText('Manage Repertoires'))
     
     // Modal should now be visible
     expect(container.querySelector('.repertoire-manager')).toBeInTheDocument()

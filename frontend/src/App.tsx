@@ -4,12 +4,14 @@ import Menu from './components/Menu'
 import MoveExplorer from './components/MoveExplorer'
 import SettingsModal from './components/SettingsModal'
 import RepertoireManager from './components/RepertoireManager'
+import RepertoireSelector from './components/RepertoireSelector'
 import { useAppState } from './contexts/AppStateContext'
 import './App.css'
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isRepertoireManagerOpen, setIsRepertoireManagerOpen] = useState(false)
+  const [isRepertoireSelectorOpen, setIsRepertoireSelectorOpen] = useState(false)
   const { state, currentTheme, updateBoardSize } = useAppState()
 
   const handleSettings = () => {
@@ -28,6 +30,14 @@ function App() {
     setIsRepertoireManagerOpen(false)
   }
 
+  const handleSelectRepertoire = () => {
+    setIsRepertoireSelectorOpen(true)
+  }
+
+  const handleCloseRepertoireSelector = () => {
+    setIsRepertoireSelectorOpen(false)
+  }
+
   return (
     <div 
       className="app" 
@@ -40,6 +50,7 @@ function App() {
         <Menu
           onSettings={handleSettings}
           onRepertoires={handleRepertoires}
+          onSelectRepertoire={handleSelectRepertoire}
         />
         <div className="main-content">
           <Chessboard 
@@ -57,6 +68,10 @@ function App() {
         <RepertoireManager
           isOpen={isRepertoireManagerOpen}
           onClose={handleCloseRepertoireManager}
+        />
+        <RepertoireSelector
+          isOpen={isRepertoireSelectorOpen}
+          onClose={handleCloseRepertoireSelector}
         />
       </div>
     </div>

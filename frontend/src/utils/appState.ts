@@ -20,19 +20,52 @@ export interface BoardPreferences {
 }
 
 export type Perspective = 'white' | 'black'
+export type RepertoireMode = 'training' | 'editing'
+
+/**
+ * Represents a move in the repertoire tree
+ */
+export interface RepertoireMove {
+  san: string // Standard Algebraic Notation (e.g., "e4", "Nf3")
+  uci: string // Universal Chess Interface format (e.g., "e2e4")
+  targetNodeId: string // ID of the position node this move leads to
+  comment?: string // Optional comment about the move
+  isMainLine?: boolean // Whether this is the main/recommended line
+}
+
+/**
+ * Represents a position node in the repertoire tree
+ * Using a DAG (Directed Acyclic Graph) to handle transpositions
+ */
+export interface RepertoireNode {
+  id: string // Unique identifier (can be FEN or hash of FEN)
+  fen: string // Position in Forsyth-Edwards Notation
+  moves: RepertoireMove[] // Available moves from this position
+  parentMoves: Array<{ // Moves that lead to this position (for transpositions)
+    fromNodeId: string
+    san: string
+    uci: string
+  }>
+  comment?: string // Optional comment about the position
+  evaluation?: string // Optional evaluation (e.g., "+0.5", "=", "±")
+}
 
 export interface Repertoire {
   id: string
   name: string
   perspective: Perspective
-  openings: string[]
-  // Future: Add more fields as repertoire features are developed
+  rootNodeId: string // Starting position (usually initial position)
+  nodes: Record<string, RepertoireNode> // Map of node ID to node
+  createdAt: string
+  updatedAt: string
 }
 
 export interface AppState {
   version: string
   preferences: BoardPreferences
   repertoires: Repertoire[]
+  selectedRepertoireId: string | null // Currently selected repertoire
+  repertoireMode: RepertoireMode | null // Current mode: training or editing
   lastModified: string
 }
 
@@ -81,10 +114,38 @@ const DEFAULT_STATE: AppState = {
     theme: 'calico'
   },
   repertoires: [],
+  selectedRepertoireId: null,
+  repertoireMode: null,
   lastModified: new Date().toISOString()
 }
 
 const STORAGE_KEY = 'calicoChessState'
+
+/**
+ * Migrate old repertoire format to new format
+ */
+function migrateRepertoire(repertoire: any): Repertoire {
+  // If already has nodes structure, return as is
+  if (repertoire.nodes && repertoire.rootNodeId) {
+    return repertoire as Repertoire
+  }
+  
+  // Migrate old format to new format
+  const initialNode = createInitialRepertoireNode()
+  const now = new Date().toISOString()
+  
+  return {
+    id: repertoire.id,
+    name: repertoire.name,
+    perspective: repertoire.perspective,
+    rootNodeId: 'initial',
+    nodes: {
+      initial: initialNode
+    },
+    createdAt: repertoire.createdAt || now,
+    updatedAt: repertoire.updatedAt || now
+  }
+}
 
 /**
  * Load state from localStorage
@@ -94,6 +155,9 @@ export function loadState(): AppState {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       const parsed = JSON.parse(stored) as AppState
+      // Migrate repertoires to new format if needed
+      const migratedRepertoires = parsed.repertoires?.map(migrateRepertoire) || []
+      
       // Validate and merge with defaults to handle version changes
       return {
         ...DEFAULT_STATE,
@@ -101,7 +165,8 @@ export function loadState(): AppState {
         preferences: {
           ...DEFAULT_STATE.preferences,
           ...parsed.preferences
-        }
+        },
+        repertoires: migratedRepertoires
       }
     }
   } catch (error) {
@@ -283,7 +348,57 @@ export function deleteRepertoire(id: string): void {
   const currentState = loadState()
   const updatedState: AppState = {
     ...currentState,
-    repertoires: currentState.repertoires.filter(rep => rep.id !== id)
+    repertoires: currentState.repertoires.filter(rep => rep.id !== id),
+    // Clear selection if deleted repertoire was selected
+    selectedRepertoireId: currentState.selectedRepertoireId === id ? null : currentState.selectedRepertoireId,
+    repertoireMode: currentState.selectedRepertoireId === id ? null : currentState.repertoireMode
   }
   saveState(updatedState)
+}
+
+/**
+ * Select a repertoire and set the mode
+ */
+export function selectRepertoire(id: string | null, mode: RepertoireMode | null): void {
+  const currentState = loadState()
+  const updatedState: AppState = {
+    ...currentState,
+    selectedRepertoireId: id,
+    repertoireMode: mode
+  }
+  saveState(updatedState)
+}
+
+/**
+ * Create initial repertoire node (starting position)
+ */
+export function createInitialRepertoireNode(): RepertoireNode {
+  const initialFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+  return {
+    id: 'initial',
+    fen: initialFen,
+    moves: [],
+    parentMoves: [],
+    comment: 'Starting position'
+  }
+}
+
+/**
+ * Create a new empty repertoire with initial position
+ */
+export function createEmptyRepertoire(name: string, perspective: Perspective): Repertoire {
+  const initialNode = createInitialRepertoireNode()
+  const now = new Date().toISOString()
+  
+  return {
+    id: `rep_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+    name,
+    perspective,
+    rootNodeId: 'initial',
+    nodes: {
+      initial: initialNode
+    },
+    createdAt: now,
+    updatedAt: now
+  }
 }

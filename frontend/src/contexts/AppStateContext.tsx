@@ -1,7 +1,17 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
-import type { AppState, Theme, Repertoire } from '../utils/appState'
-import { loadState, saveState, exportState, importState, resetState, getCurrentTheme, THEMES } from '../utils/appState'
+import type { AppState, Theme, Repertoire, RepertoireMode } from '../utils/appState'
+import { 
+  loadState, 
+  saveState, 
+  exportState, 
+  importState, 
+  resetState, 
+  getCurrentTheme, 
+  THEMES,
+  createEmptyRepertoire,
+  selectRepertoire 
+} from '../utils/appState'
 
 interface AppStateContextType {
   state: AppState
@@ -10,9 +20,10 @@ interface AppStateContextType {
   updateDarkSquareColor: (color: string) => void
   updateBoardSize: (size: number) => void
   updateTheme: (themeName: string) => void
-  addRepertoire: (repertoire: Omit<Repertoire, 'id'>) => void
+  addRepertoire: (name: string, perspective: 'white' | 'black') => void
   updateRepertoire: (id: string, updates: Partial<Omit<Repertoire, 'id'>>) => void
   deleteRepertoire: (id: string) => void
+  selectRepertoire: (id: string | null, mode: RepertoireMode | null) => void
   exportAppState: () => void
   importAppState: () => Promise<void>
   resetAppState: () => void
@@ -87,16 +98,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setState(loadState())
   }
 
-  const addRepertoire = (repertoire: Omit<Repertoire, 'id'>) => {
+  const addRepertoire = (name: string, perspective: 'white' | 'black') => {
+    const newRepertoire = createEmptyRepertoire(name, perspective)
     setState(prev => ({
       ...prev,
-      repertoires: [
-        ...prev.repertoires,
-        {
-          ...repertoire,
-          id: `rep_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-        }
-      ]
+      repertoires: [...prev.repertoires, newRepertoire]
     }))
   }
 
@@ -104,7 +110,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setState(prev => ({
       ...prev,
       repertoires: prev.repertoires.map(rep =>
-        rep.id === id ? { ...rep, ...updates } : rep
+        rep.id === id ? { ...rep, ...updates, updatedAt: new Date().toISOString() } : rep
       )
     }))
   }
@@ -112,7 +118,19 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const deleteRepertoire = (id: string) => {
     setState(prev => ({
       ...prev,
-      repertoires: prev.repertoires.filter(rep => rep.id !== id)
+      repertoires: prev.repertoires.filter(rep => rep.id !== id),
+      // Clear selection if deleted repertoire was selected
+      selectedRepertoireId: prev.selectedRepertoireId === id ? null : prev.selectedRepertoireId,
+      repertoireMode: prev.selectedRepertoireId === id ? null : prev.repertoireMode
+    }))
+  }
+
+  const handleSelectRepertoire = (id: string | null, mode: RepertoireMode | null) => {
+    selectRepertoire(id, mode) // Also save to localStorage
+    setState(prev => ({
+      ...prev,
+      selectedRepertoireId: id,
+      repertoireMode: mode
     }))
   }
 
@@ -128,6 +146,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         addRepertoire,
         updateRepertoire,
         deleteRepertoire,
+        selectRepertoire: handleSelectRepertoire,
         exportAppState,
         importAppState,
         resetAppState

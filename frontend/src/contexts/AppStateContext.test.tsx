@@ -37,7 +37,7 @@ function TestComponent() {
       <button onClick={() => updateBoardSize(640)}>
         Change Size
       </button>
-      <button onClick={() => addRepertoire({ name: 'Test Repertoire', perspective: 'white', openings: [] })}>
+      <button onClick={() => addRepertoire('Test Repertoire', 'white')}>
         Add Repertoire
       </button>
       <button onClick={() => {

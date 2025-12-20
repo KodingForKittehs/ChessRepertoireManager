@@ -9,6 +9,9 @@ import {
   addRepertoire,
   updateRepertoire,
   deleteRepertoire,
+  selectRepertoire,
+  createEmptyRepertoire,
+  createInitialRepertoireNode,
   exportState,
   THEMES,
   type AppState,
@@ -167,7 +170,17 @@ describe('appState utility', () => {
         id: 'test-1',
         name: 'My Repertoire',
         perspective: 'white',
-        openings: ['e4', 'd4']
+        rootNodeId: 'initial',
+        nodes: {
+          initial: {
+            id: 'initial',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+            moves: [],
+            parentMoves: []
+          }
+        },
+        createdAt: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z'
       }
 
       addRepertoire(repertoire)
@@ -183,7 +196,17 @@ describe('appState utility', () => {
         id: 'test-1',
         name: 'Original',
         perspective: 'white',
-        openings: []
+        rootNodeId: 'initial',
+        nodes: {
+          initial: {
+            id: 'initial',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+            moves: [],
+            parentMoves: []
+          }
+        },
+        createdAt: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z'
       }
       addRepertoire(repertoire)
 
@@ -195,8 +218,38 @@ describe('appState utility', () => {
     })
 
     it('deletes a repertoire', () => {
-      const rep1: Repertoire = { id: 'test-1', name: 'Rep 1', perspective: 'white', openings: [] }
-      const rep2: Repertoire = { id: 'test-2', name: 'Rep 2', perspective: 'black', openings: [] }
+      const rep1: Repertoire = {
+        id: 'test-1',
+        name: 'Rep 1',
+        perspective: 'white',
+        rootNodeId: 'initial',
+        nodes: {
+          initial: {
+            id: 'initial',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+            moves: [],
+            parentMoves: []
+          }
+        },
+        createdAt: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z'
+      }
+      const rep2: Repertoire = {
+        id: 'test-2',
+        name: 'Rep 2',
+        perspective: 'black',
+        rootNodeId: 'initial',
+        nodes: {
+          initial: {
+            id: 'initial',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+            moves: [],
+            parentMoves: []
+          }
+        },
+        createdAt: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z'
+      }
       addRepertoire(rep1)
       addRepertoire(rep2)
 
@@ -274,6 +327,68 @@ describe('appState utility', () => {
       const theme = getCurrentTheme(state)
       expect(theme).toBe(THEMES.calico)
       expect(theme.name).toBe('Calico')
+    })
+  })
+
+  describe('selectRepertoire', () => {
+    it('selects a repertoire with training mode', () => {
+      selectRepertoire('rep-123', 'training')
+      
+      const state = loadState()
+      expect(state.selectedRepertoireId).toBe('rep-123')
+      expect(state.repertoireMode).toBe('training')
+    })
+
+    it('selects a repertoire with editing mode', () => {
+      selectRepertoire('rep-456', 'editing')
+      
+      const state = loadState()
+      expect(state.selectedRepertoireId).toBe('rep-456')
+      expect(state.repertoireMode).toBe('editing')
+    })
+
+    it('deselects repertoire when passed null', () => {
+      selectRepertoire('rep-123', 'training')
+      selectRepertoire(null, null)
+      
+      const state = loadState()
+      expect(state.selectedRepertoireId).toBeNull()
+      expect(state.repertoireMode).toBeNull()
+    })
+  })
+
+  describe('createEmptyRepertoire', () => {
+    it('creates a repertoire with initial node', () => {
+      const repertoire = createEmptyRepertoire('Test Opening', 'white')
+      
+      expect(repertoire.name).toBe('Test Opening')
+      expect(repertoire.perspective).toBe('white')
+      expect(repertoire.rootNodeId).toBe('initial')
+      expect(repertoire.nodes.initial).toBeDefined()
+      expect(repertoire.nodes.initial.fen).toBe('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+      expect(repertoire.nodes.initial.moves).toEqual([])
+      expect(repertoire.id).toMatch(/^rep_/)
+      expect(repertoire.createdAt).toBeDefined()
+      expect(repertoire.updatedAt).toBeDefined()
+    })
+
+    it('creates unique IDs for different repertoires', () => {
+      const rep1 = createEmptyRepertoire('Opening 1', 'white')
+      const rep2 = createEmptyRepertoire('Opening 2', 'black')
+      
+      expect(rep1.id).not.toBe(rep2.id)
+    })
+  })
+
+  describe('createInitialRepertoireNode', () => {
+    it('creates initial position node', () => {
+      const node = createInitialRepertoireNode()
+      
+      expect(node.id).toBe('initial')
+      expect(node.fen).toBe('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+      expect(node.moves).toEqual([])
+      expect(node.parentMoves).toEqual([])
+      expect(node.comment).toBe('Starting position')
     })
   })
 

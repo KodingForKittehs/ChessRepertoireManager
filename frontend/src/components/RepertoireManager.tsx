@@ -21,11 +21,7 @@ function RepertoireManager({ isOpen, onClose }: RepertoireManagerProps) {
   const handleCreateRepertoire = (e: React.FormEvent) => {
     e.preventDefault()
     if (newRepertoireName.trim()) {
-      addRepertoire({
-        name: newRepertoireName.trim(),
-        perspective: newRepertoirePerspective,
-        openings: []
-      })
+      addRepertoire(newRepertoireName.trim(), newRepertoirePerspective)
       setNewRepertoireName('')
       setNewRepertoirePerspective('white')
     }
