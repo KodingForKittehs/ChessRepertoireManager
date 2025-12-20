@@ -18,10 +18,26 @@ function Menu({ onSettings, onRepertoires }: MenuProps) {
       }}
     >
       <div className="menu-section">
-        <button className="menu-button" onClick={onRepertoires}>
+        <button 
+          className="menu-button" 
+          onClick={onRepertoires}
+          style={{
+            backgroundColor: currentTheme.accent,
+            borderColor: currentTheme.accent,
+            color: '#ffffff'
+          }}
+        >
           Repertoires
         </button>
-        <button className="menu-button" onClick={onSettings}>
+        <button 
+          className="menu-button" 
+          onClick={onSettings}
+          style={{
+            backgroundColor: currentTheme.accent,
+            borderColor: currentTheme.accent,
+            color: '#ffffff'
+          }}
+        >
           Settings
         </button>
       </div>

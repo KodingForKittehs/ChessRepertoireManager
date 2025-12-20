@@ -111,7 +111,13 @@ function RepertoireManager({ isOpen, onClose }: RepertoireManagerProps) {
                 <option value="black">Black</option>
               </select>
             </div>
-            <button type="submit" className="create-button">Create Repertoire</button>
+            <button 
+              type="submit" 
+              className="create-button"
+              style={{ backgroundColor: currentTheme.accent }}
+            >
+              Create Repertoire
+            </button>
           </form>
 
           {/* Repertoire List */}
@@ -140,7 +146,11 @@ function RepertoireManager({ isOpen, onClose }: RepertoireManagerProps) {
                           <option value="black">Black</option>
                         </select>
                         <div className="edit-actions">
-                          <button onClick={() => handleSaveEdit(repertoire.id)} className="save-button">
+                          <button 
+                            onClick={() => handleSaveEdit(repertoire.id)} 
+                            className="save-button"
+                            style={{ backgroundColor: currentTheme.accent }}
+                          >
                             Save
                           </button>
                           <button onClick={handleCancelEdit} className="cancel-button">
@@ -160,6 +170,7 @@ function RepertoireManager({ isOpen, onClose }: RepertoireManagerProps) {
                           <button
                             onClick={() => handleStartEdit(repertoire.id, repertoire.name, repertoire.perspective)}
                             className="edit-button"
+                            style={{ backgroundColor: currentTheme.accent }}
                           >
                             Edit
                           </button>

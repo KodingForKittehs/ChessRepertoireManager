@@ -109,6 +109,11 @@ function SettingsModal({
                   className={`theme-option ${state.preferences.theme === key ? 'active' : ''}`}
                   onClick={() => updateTheme(key)}
                   title={theme.name}
+                  style={
+                    state.preferences.theme === key 
+                      ? { borderColor: currentTheme.accent }
+                      : undefined
+                  }
                 >
                   <div 
                     className="theme-preview-large" 
@@ -186,10 +191,18 @@ function SettingsModal({
           <div className="state-management-section">
             <h3>State Management</h3>
             <div className="state-buttons">
-              <button className="state-button export" onClick={handleExport}>
+              <button 
+                className="state-button export" 
+                onClick={handleExport}
+                style={{ backgroundColor: currentTheme.accent }}
+              >
                 Export Settings
               </button>
-              <button className="state-button import" onClick={handleImport}>
+              <button 
+                className="state-button import" 
+                onClick={handleImport}
+                style={{ backgroundColor: currentTheme.accent }}
+              >
                 Import Settings
               </button>
               <button className="state-button reset" onClick={handleReset}>
