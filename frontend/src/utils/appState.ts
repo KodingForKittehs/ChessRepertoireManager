@@ -44,7 +44,7 @@ export const THEMES: Record<string, Theme> = {
   blue: {
     name: 'Blue',
     background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
-    foreground: '#ffffff',
+    foreground: '#1a1a1a',
     accent: '#4a90e2',
     cardBackground: 'rgba(255, 255, 255, 0.95)'
   },
@@ -58,7 +58,7 @@ export const THEMES: Record<string, Theme> = {
   forest: {
     name: 'Forest',
     background: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)',
-    foreground: '#ffffff',
+    foreground: '#1a1a1a',
     accent: '#71b280',
     cardBackground: 'rgba(255, 255, 255, 0.95)'
   }
