@@ -18,9 +18,12 @@ export interface BoardPreferences {
   theme: string // theme name
 }
 
+export type Perspective = 'white' | 'black'
+
 export interface Repertoire {
   id: string
   name: string
+  perspective: Perspective
   openings: string[]
   // Future: Add more fields as repertoire features are developed
 }

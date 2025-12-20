@@ -3,11 +3,13 @@ import Chessboard from './components/Chessboard'
 import Menu from './components/Menu'
 import MoveExplorer from './components/MoveExplorer'
 import SettingsModal from './components/SettingsModal'
+import RepertoireManager from './components/RepertoireManager'
 import { useAppState } from './contexts/AppStateContext'
 import './App.css'
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [isRepertoireManagerOpen, setIsRepertoireManagerOpen] = useState(false)
   const { state, currentTheme, updateBoardSize } = useAppState()
 
   const handleNewGame = () => {
@@ -43,6 +45,14 @@ function App() {
     setIsSettingsOpen(false)
   }
 
+  const handleRepertoires = () => {
+    setIsRepertoireManagerOpen(true)
+  }
+
+  const handleCloseRepertoireManager = () => {
+    setIsRepertoireManagerOpen(false)
+  }
+
   return (
     <div 
       className="app" 
@@ -59,6 +69,7 @@ function App() {
           onUndo={handleUndo}
           onRedo={handleRedo}
           onSettings={handleSettings}
+          onRepertoires={handleRepertoires}
         />
         <div className="main-content">
           <Chessboard 
@@ -72,6 +83,10 @@ function App() {
         <SettingsModal
           isOpen={isSettingsOpen}
           onClose={handleCloseSettings}
+        />
+        <RepertoireManager
+          isOpen={isRepertoireManagerOpen}
+          onClose={handleCloseRepertoireManager}
         />
       </div>
     </div>

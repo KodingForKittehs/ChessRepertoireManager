@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
-import type { AppState, Theme } from '../utils/appState'
+import type { AppState, Theme, Repertoire } from '../utils/appState'
 import { loadState, saveState, exportState, importState, resetState, getCurrentTheme, THEMES } from '../utils/appState'
 
 interface AppStateContextType {
@@ -10,6 +10,9 @@ interface AppStateContextType {
   updateDarkSquareColor: (color: string) => void
   updateBoardSize: (size: number) => void
   updateTheme: (themeName: string) => void
+  addRepertoire: (repertoire: Omit<Repertoire, 'id'>) => void
+  updateRepertoire: (id: string, updates: Partial<Omit<Repertoire, 'id'>>) => void
+  deleteRepertoire: (id: string) => void
   exportAppState: () => void
   importAppState: () => Promise<void>
   resetAppState: () => void
@@ -84,6 +87,35 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setState(loadState())
   }
 
+  const addRepertoire = (repertoire: Omit<Repertoire, 'id'>) => {
+    setState(prev => ({
+      ...prev,
+      repertoires: [
+        ...prev.repertoires,
+        {
+          ...repertoire,
+          id: `rep_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+        }
+      ]
+    }))
+  }
+
+  const updateRepertoire = (id: string, updates: Partial<Omit<Repertoire, 'id'>>) => {
+    setState(prev => ({
+      ...prev,
+      repertoires: prev.repertoires.map(rep =>
+        rep.id === id ? { ...rep, ...updates } : rep
+      )
+    }))
+  }
+
+  const deleteRepertoire = (id: string) => {
+    setState(prev => ({
+      ...prev,
+      repertoires: prev.repertoires.filter(rep => rep.id !== id)
+    }))
+  }
+
   return (
     <AppStateContext.Provider
       value={{
@@ -93,6 +125,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         updateDarkSquareColor,
         updateBoardSize,
         updateTheme,
+        addRepertoire,
+        updateRepertoire,
+        deleteRepertoire,
         exportAppState,
         importAppState,
         resetAppState

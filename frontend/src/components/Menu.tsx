@@ -8,9 +8,10 @@ interface MenuProps {
   onUndo?: () => void
   onRedo?: () => void
   onSettings?: () => void
+  onRepertoires?: () => void
 }
 
-function Menu({ onNewGame, onSave, onLoad, onUndo, onRedo, onSettings }: MenuProps) {
+function Menu({ onNewGame, onSave, onLoad, onUndo, onRedo, onSettings, onRepertoires }: MenuProps) {
   const { currentTheme } = useAppState()
   
   return (
@@ -41,6 +42,9 @@ function Menu({ onNewGame, onSave, onLoad, onUndo, onRedo, onSettings }: MenuPro
         </button>
       </div>
       <div className="menu-section">
+        <button className="menu-button" onClick={onRepertoires}>
+          Repertoires
+        </button>
         <button className="menu-button" onClick={onSettings}>
           Settings
         </button>

@@ -37,7 +37,8 @@ describe('appState utility', () => {
         preferences: {
           lightSquareColor: '#123456',
           darkSquareColor: '#abcdef',
-          boardSize: 640
+          boardSize: 640,
+          theme: 'calico'
         },
         repertoires: [],
         lastModified: new Date().toISOString()
@@ -80,7 +81,8 @@ describe('appState utility', () => {
         preferences: {
           lightSquareColor: '#ffffff',
           darkSquareColor: '#000000',
-          boardSize: 720
+          boardSize: 720,
+          theme: 'calico'
         },
         repertoires: [],
         lastModified: new Date().toISOString()
@@ -100,7 +102,9 @@ describe('appState utility', () => {
         version: '1.0.0',
         preferences: {
           lightSquareColor: '#f0d9b5',
-          darkSquareColor: '#b58863'
+          darkSquareColor: '#b58863',
+          boardSize: 480,
+          theme: 'calico'
         },
         repertoires: [],
         lastModified: oldDate
@@ -162,6 +166,7 @@ describe('appState utility', () => {
       const repertoire: Repertoire = {
         id: 'test-1',
         name: 'My Repertoire',
+        perspective: 'white',
         openings: ['e4', 'd4']
       }
 
@@ -170,25 +175,28 @@ describe('appState utility', () => {
       const state = loadState()
       expect(state.repertoires).toHaveLength(1)
       expect(state.repertoires[0].name).toBe('My Repertoire')
+      expect(state.repertoires[0].perspective).toBe('white')
     })
 
     it('updates a repertoire', () => {
       const repertoire: Repertoire = {
         id: 'test-1',
         name: 'Original',
+        perspective: 'white',
         openings: []
       }
       addRepertoire(repertoire)
 
-      updateRepertoire('test-1', { name: 'Updated' })
+      updateRepertoire('test-1', { name: 'Updated', perspective: 'black' })
 
       const state = loadState()
       expect(state.repertoires[0].name).toBe('Updated')
+      expect(state.repertoires[0].perspective).toBe('black')
     })
 
     it('deletes a repertoire', () => {
-      const rep1: Repertoire = { id: 'test-1', name: 'Rep 1', openings: [] }
-      const rep2: Repertoire = { id: 'test-2', name: 'Rep 2', openings: [] }
+      const rep1: Repertoire = { id: 'test-1', name: 'Rep 1', perspective: 'white', openings: [] }
+      const rep2: Repertoire = { id: 'test-2', name: 'Rep 2', perspective: 'black', openings: [] }
       addRepertoire(rep1)
       addRepertoire(rep2)
 

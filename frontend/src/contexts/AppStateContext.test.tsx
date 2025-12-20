@@ -10,6 +10,9 @@ function TestComponent() {
     updateLightSquareColor, 
     updateDarkSquareColor,
     updateBoardSize,
+    addRepertoire,
+    updateRepertoire,
+    deleteRepertoire,
     resetAppState 
   } = useAppState()
 
@@ -19,6 +22,12 @@ function TestComponent() {
       <div data-testid="dark-color">{state.preferences.darkSquareColor}</div>
       <div data-testid="board-size">{state.preferences.boardSize}</div>
       <div data-testid="version">{state.version}</div>
+      <div data-testid="repertoire-count">{state.repertoires.length}</div>
+      {state.repertoires.map(rep => (
+        <div key={rep.id} data-testid={`repertoire-${rep.id}`}>
+          {rep.name} - {rep.perspective}
+        </div>
+      ))}
       <button onClick={() => updateLightSquareColor('#ffffff')}>
         Change Light
       </button>
@@ -27,6 +36,25 @@ function TestComponent() {
       </button>
       <button onClick={() => updateBoardSize(640)}>
         Change Size
+      </button>
+      <button onClick={() => addRepertoire({ name: 'Test Repertoire', perspective: 'white', openings: [] })}>
+        Add Repertoire
+      </button>
+      <button onClick={() => {
+        const firstRep = state.repertoires[0]
+        if (firstRep) {
+          updateRepertoire(firstRep.id, { name: 'Updated Repertoire' })
+        }
+      }}>
+        Update Repertoire
+      </button>
+      <button onClick={() => {
+        const firstRep = state.repertoires[0]
+        if (firstRep) {
+          deleteRepertoire(firstRep.id)
+        }
+      }}>
+        Delete Repertoire
       </button>
       <button onClick={resetAppState}>Reset</button>
     </div>
@@ -128,6 +156,70 @@ describe('AppStateContext', () => {
     
     await waitFor(() => {
       expect(screen.getByTestId('board-size')).toHaveTextContent('640')
+    })
+  })
+
+  it('adds a repertoire', async () => {
+    renderWithProvider(<TestComponent />)
+    
+    expect(screen.getByTestId('repertoire-count')).toHaveTextContent('0')
+    
+    fireEvent.click(screen.getByText('Add Repertoire'))
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('repertoire-count')).toHaveTextContent('1')
+      expect(screen.getByText(/Test Repertoire - white/)).toBeInTheDocument()
+    })
+  })
+
+  it('updates a repertoire', async () => {
+    renderWithProvider(<TestComponent />)
+    
+    // Add a repertoire first
+    fireEvent.click(screen.getByText('Add Repertoire'))
+    
+    await waitFor(() => {
+      expect(screen.getByText(/Test Repertoire - white/)).toBeInTheDocument()
+    })
+    
+    // Update the repertoire
+    fireEvent.click(screen.getByText('Update Repertoire'))
+    
+    await waitFor(() => {
+      expect(screen.getByText(/Updated Repertoire - white/)).toBeInTheDocument()
+    })
+  })
+
+  it('deletes a repertoire', async () => {
+    renderWithProvider(<TestComponent />)
+    
+    // Add a repertoire first
+    fireEvent.click(screen.getByText('Add Repertoire'))
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('repertoire-count')).toHaveTextContent('1')
+    })
+    
+    // Delete the repertoire
+    fireEvent.click(screen.getByText('Delete Repertoire'))
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('repertoire-count')).toHaveTextContent('0')
+    })
+  })
+
+  it('persists repertoires to localStorage', async () => {
+    renderWithProvider(<TestComponent />)
+    
+    fireEvent.click(screen.getByText('Add Repertoire'))
+    
+    await waitFor(() => {
+      const saved = localStorage.getItem('calicoChessState')
+      expect(saved).toBeTruthy()
+      const state = JSON.parse(saved!)
+      expect(state.repertoires).toHaveLength(1)
+      expect(state.repertoires[0].name).toBe('Test Repertoire')
+      expect(state.repertoires[0].perspective).toBe('white')
     })
   })
 })
