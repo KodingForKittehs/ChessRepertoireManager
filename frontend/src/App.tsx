@@ -12,31 +12,6 @@ function App() {
   const [isRepertoireManagerOpen, setIsRepertoireManagerOpen] = useState(false)
   const { state, currentTheme, updateBoardSize } = useAppState()
 
-  const handleNewGame = () => {
-    console.log('New Game clicked')
-    // TODO: Implement new game logic
-  }
-
-  const handleSave = () => {
-    console.log('Save clicked')
-    // TODO: Implement save game logic
-  }
-
-  const handleLoad = () => {
-    console.log('Load clicked')
-    // TODO: Implement load game logic
-  }
-
-  const handleUndo = () => {
-    console.log('Undo clicked')
-    // TODO: Implement undo logic
-  }
-
-  const handleRedo = () => {
-    console.log('Redo clicked')
-    // TODO: Implement redo logic
-  }
-
   const handleSettings = () => {
     setIsSettingsOpen(true)
   }
@@ -63,11 +38,6 @@ function App() {
     >
       <div className="app-container">
         <Menu
-          onNewGame={handleNewGame}
-          onSave={handleSave}
-          onLoad={handleLoad}
-          onUndo={handleUndo}
-          onRedo={handleRedo}
           onSettings={handleSettings}
           onRepertoires={handleRepertoires}
         />
