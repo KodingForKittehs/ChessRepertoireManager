@@ -75,10 +75,28 @@ function SettingsModal({
 
   return (
     <div className="settings-overlay" onClick={handleOverlayClick}>
-      <div className="settings-modal">
-        <div className="settings-header">
+      <div 
+        className="settings-modal"
+        style={{
+          backgroundColor: currentTheme.cardBackground,
+          color: currentTheme.foreground
+        }}
+      >
+        <div 
+          className="settings-header"
+          style={{
+            backgroundColor: currentTheme.headerBackground,
+            color: '#ffffff'
+          }}
+        >
           <h2>Settings</h2>
-          <button className="close-button" onClick={onClose}>×</button>
+          <button 
+            className="close-button" 
+            onClick={onClose}
+            style={{ color: '#ffffff' }}
+          >
+            ×
+          </button>
         </div>
         
         <div className="settings-content">

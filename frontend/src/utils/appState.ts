@@ -9,6 +9,7 @@ export interface Theme {
   foreground: string
   accent: string
   cardBackground: string
+  headerBackground: string
 }
 
 export interface BoardPreferences {
@@ -42,28 +43,32 @@ export const THEMES: Record<string, Theme> = {
     background: 'linear-gradient(135deg, #f4e4d7 0%, #e8d5c4 25%, #d4a574 50%, #8b6f47 75%, #5a4a3a 100%)',
     foreground: '#2c1810',
     accent: '#d4a574',
-    cardBackground: 'rgba(244, 228, 215, 0.95)'
+    cardBackground: 'rgba(244, 228, 215, 0.95)',
+    headerBackground: '#d4a574'
   },
   blue: {
     name: 'Blue',
     background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
     foreground: '#1a1a1a',
     accent: '#4a90e2',
-    cardBackground: 'rgba(255, 255, 255, 0.95)'
+    cardBackground: 'rgba(255, 255, 255, 0.95)',
+    headerBackground: '#2a5298'
   },
   dark: {
     name: 'Dark',
     background: 'linear-gradient(135deg, #232526 0%, #414345 100%)',
     foreground: '#ffffff',
     accent: '#667eea',
-    cardBackground: 'rgba(60, 60, 60, 0.95)'
+    cardBackground: 'rgba(60, 60, 60, 0.95)',
+    headerBackground: '#232526'
   },
   forest: {
     name: 'Forest',
     background: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)',
     foreground: '#1a1a1a',
     accent: '#71b280',
-    cardBackground: 'rgba(255, 255, 255, 0.95)'
+    cardBackground: 'rgba(255, 255, 255, 0.95)',
+    headerBackground: '#134e5e'
   }
 }
 

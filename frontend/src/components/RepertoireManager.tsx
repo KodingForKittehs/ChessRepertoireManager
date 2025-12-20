@@ -68,9 +68,21 @@ function RepertoireManager({ isOpen, onClose }: RepertoireManagerProps) {
           color: currentTheme.foreground
         }}
       >
-        <div className="repertoire-manager-header">
+        <div 
+          className="repertoire-manager-header"
+          style={{
+            backgroundColor: currentTheme.headerBackground,
+            color: '#ffffff'
+          }}
+        >
           <h2>Repertoire Manager</h2>
-          <button className="close-button" onClick={onClose}>×</button>
+          <button 
+            className="close-button" 
+            onClick={onClose}
+            style={{ color: '#ffffff' }}
+          >
+            ×
+          </button>
         </div>
 
         <div className="repertoire-manager-content">
