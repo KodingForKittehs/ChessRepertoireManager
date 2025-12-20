@@ -52,4 +52,27 @@ describe('App', () => {
     expect(container.querySelector('.repertoire-manager')).toBeInTheDocument()
     expect(screen.getByText('Repertoire Manager')).toBeInTheDocument()
   })
+
+  it('opens repertoire selector when Select Repertoire button is clicked', () => {
+    const { container } = renderWithProvider(<App />)
+    
+    // Modal should not be visible initially
+    expect(container.querySelector('.repertoire-selector')).not.toBeInTheDocument()
+    
+    // Click Select Repertoire button
+    fireEvent.click(screen.getByText('Select Repertoire'))
+    
+    // Modal should now be visible
+    expect(container.querySelector('.repertoire-selector')).toBeInTheDocument()
+  })
+
+  it('closes modals when their close handlers are called', () => {
+    const { container } = renderWithProvider(<App />)
+    
+    // Open and close settings
+    fireEvent.click(screen.getByText('Settings'))
+    expect(container.querySelector('.settings-modal')).toBeInTheDocument()
+    fireEvent.click(screen.getAllByText('×')[0])
+    expect(container.querySelector('.settings-modal')).not.toBeInTheDocument()
+  })
 })

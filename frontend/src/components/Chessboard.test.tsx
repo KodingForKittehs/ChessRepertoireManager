@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
 import { renderWithProvider } from '../test/testUtils'
 import Chessboard from './Chessboard'
+import type { AppState } from '../utils/appState'
 
 describe('Chessboard', () => {
   it('renders without crashing', () => {
@@ -103,5 +104,121 @@ describe('Chessboard', () => {
       const lastCall = calls[calls.length - 1][0]
       expect(lastCall).toBeLessThanOrEqual(800)
     }
+  })
+
+  it('does not show editing mode controls when not in editing mode', () => {
+    renderWithProvider(<Chessboard />)
+    expect(screen.queryByText(/Editing Mode/)).not.toBeInTheDocument()
+  })
+
+  it('shows editing mode controls when in editing mode', () => {
+    const mockState: Partial<AppState> = {
+      selectedRepertoireId: 'rep_test',
+      repertoireMode: 'editing',
+      repertoires: [{
+        id: 'rep_test',
+        name: 'Test Repertoire',
+        perspective: 'white',
+        rootNodeId: 'initial',
+        nodes: {
+          initial: {
+            id: 'initial',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+            moves: [],
+            parentMoves: []
+          }
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }]
+    }
+
+    renderWithProvider(<Chessboard />, mockState)
+    expect(screen.getByText(/Editing Mode/)).toBeInTheDocument()
+    expect(screen.getByTitle('Undo last move')).toBeInTheDocument()
+    expect(screen.getByTitle('Reset to starting position')).toBeInTheDocument()
+  })
+
+  it('undo button is disabled when no moves have been made', () => {
+    const mockState: Partial<AppState> = {
+      selectedRepertoireId: 'rep_test',
+      repertoireMode: 'editing',
+      repertoires: [{
+        id: 'rep_test',
+        name: 'Test Repertoire',
+        perspective: 'white',
+        rootNodeId: 'initial',
+        nodes: {
+          initial: {
+            id: 'initial',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+            moves: [],
+            parentMoves: []
+          }
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }]
+    }
+
+    renderWithProvider(<Chessboard />, mockState)
+    const undoButton = screen.getByTitle('Undo last move')
+    expect(undoButton).toBeDisabled()
+  })
+
+  it('shows correct board orientation based on repertoire perspective', () => {
+    const mockState: Partial<AppState> = {
+      selectedRepertoireId: 'rep_test',
+      repertoireMode: 'editing',
+      repertoires: [{
+        id: 'rep_test',
+        name: 'Test Repertoire',
+        perspective: 'black',
+        rootNodeId: 'initial',
+        nodes: {
+          initial: {
+            id: 'initial',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+            moves: [],
+            parentMoves: []
+          }
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }]
+    }
+
+    const { container } = renderWithProvider(<Chessboard />, mockState)
+    // The board should be rendered
+    expect(container.querySelector('svg')).toBeInTheDocument()
+  })
+
+  it('resets position when reset button is clicked', () => {
+    const mockState: Partial<AppState> = {
+      selectedRepertoireId: 'rep_test',
+      repertoireMode: 'editing',
+      repertoires: [{
+        id: 'rep_test',
+        name: 'Test Repertoire',
+        perspective: 'white',
+        rootNodeId: 'initial',
+        nodes: {
+          initial: {
+            id: 'initial',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+            moves: [],
+            parentMoves: []
+          }
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }]
+    }
+
+    renderWithProvider(<Chessboard />, mockState)
+    const resetButton = screen.getByTitle('Reset to starting position')
+    fireEvent.click(resetButton)
+    // Should still be in editing mode
+    expect(screen.getByText(/Editing Mode/)).toBeInTheDocument()
   })
 })

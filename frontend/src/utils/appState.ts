@@ -107,7 +107,7 @@ export const THEMES: Record<string, Theme> = {
   }
 }
 
-const DEFAULT_STATE: AppState = {
+export const DEFAULT_STATE: AppState = {
   version: '1.0.0',
   preferences: {
     lightSquareColor: '#f0d9b5',
